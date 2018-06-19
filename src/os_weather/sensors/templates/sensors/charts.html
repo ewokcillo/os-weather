@@ -1,0 +1,42 @@
+{% extends 'sensors/base.html' %}
+
+{% load bootstrap4 %}
+{% bootstrap_css %}
+{% load static %}
+
+{% block bootstrap4_extra_head %}
+    <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+    <script src='https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.7.2/Chart.min.js'></script>
+    <script src='http://www.chartjs.org/samples/latest/utils.js'></script>
+{% endblock %}
+
+{% block content %}
+    <form action="{% url 'charts' %}" method="post" class="form" id="chart-form">
+        {% csrf_token %}
+        {% bootstrap_form form %}
+        {% buttons %}
+            <button type="submit" class="btn btn-primary">Submit</button>
+        {% endbuttons %}
+    </form>
+
+	<div style="width:75%;">
+        <div class="chartjs-size-monitor">
+            <div class="chartjs-size-monitor-expand">
+                <div>
+                </div>
+            </div>
+        </div>
+		<canvas id="canvas" class="chartjs-render-monitor"></canvas>
+	</div>
+
+{% endblock %}
+
+{% block bootstrap4_extra_script %}
+    {% csrf_token %}
+        <script type="text/javascript">
+        // using jQuery
+        var csrftoken = jQuery("[name=csrfmiddlewaretoken]").val();
+    </script>
+    <script src='{% static "sensors/ajax_crsf.js" %}'></script>
+	<script src='{% static "sensors/chart.js" %}'></script>
+{% endblock %}

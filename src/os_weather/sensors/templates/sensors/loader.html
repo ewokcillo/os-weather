@@ -1,11 +1,20 @@
+{% extends 'sensors/base.html' %}
+
 {% load bootstrap4 %}
+{% bootstrap_css %}
+{% load static %}
 
-{# Display a form #}
 
-<form action="{% url  'loader' %}" enctype="multipart/form-data" method="post" class="form">
+{% block bootstrap4_extra_head %}
+    <script src='https://code.jquery.com/jquery-3.2.1.min.js'></script>
+{% endblock %}
+
+{% block content %}
+<form action="{% url 'loader' %}" enctype="multipart/form-data" method="post" class="form">
     {% csrf_token %}
     {% bootstrap_form form %}
     {% buttons %}
         <button type="submit" class="btn btn-primary">Submit</button>
     {% endbuttons %}
 </form>
+{% endblock %}

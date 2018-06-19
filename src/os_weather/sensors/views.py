@@ -3,12 +3,15 @@ import re
 from collections import defaultdict
 from datetime import datetime
 from io import TextIOWrapper
-
 import pytz
+
 from django.conf import settings
+from django.http import JsonResponse
+from django.shortcuts import render
+from django.views import View
 from django.views.generic.edit import FormView
 
-from sensors.forms import LoaderForm
+from sensors.forms import LoaderForm, ChartForm
 from sensors.models import ValuesModel, ValuesCalculatedModel
 
 
@@ -113,3 +116,21 @@ class LoaderView(FormView):
                         )
                     values_calculated.value = calculation(values_list)
                     values_calculated.save()
+
+
+
+class ChartsView(View):
+    template_name="sensors/charts.html"
+    form_class = ChartForm
+
+    def get(self, request):
+        context = {'form': self.form_class}
+        return render(template_name=self.template_name,
+                      context=context,
+                      request=request)
+
+    def post(self, request):
+        #TODO
+        # Get the query and send the json response to print the chart
+
+        return JsonResponse({})
