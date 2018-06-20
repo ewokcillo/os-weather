@@ -127,3 +127,7 @@ STATIC_URL = '/static/'
 
 CALCULATIONS = {'temperature': lambda x: sum(x)/len(x),
                 'raining': lambda x: sum(x)}
+
+GRANULARITIES = {'daily': lambda x: x.strftime('%d/%m/%Y'),
+                 'weekly': lambda x: x.strftime('%W/%Y'),
+                 'monthly': lambda x: x.strftime('%m/%Y')}

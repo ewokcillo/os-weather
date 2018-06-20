@@ -1,4 +1,5 @@
 import csv
+import operator
 import re
 from collections import defaultdict
 from datetime import datetime
@@ -130,7 +131,39 @@ class ChartsView(View):
                       request=request)
 
     def post(self, request):
-        #TODO
-        # Get the query and send the json response to print the chart
+        form_fields = request.POST
 
-        return JsonResponse({})
+        form_date_2_date = \
+            lambda d, m, y: datetime.strptime('{}{}{}'.format(d, m, y),
+                                              '%d%m%Y')
+
+        start_date = form_date_2_date(form_fields['start_day_day'],
+                                      form_fields['start_day_month'],
+                                      form_fields['start_day_year'])
+
+        end_date = form_date_2_date(form_fields['end_day_day'],
+                                      form_fields['end_day_month'],
+                                      form_fields['end_day_year'])
+
+        signals = form_fields.getlist('signals')
+
+        queryset = ValuesCalculatedModel.objects.filter(
+            sensor=form_fields['sensor'],
+            signal__in=signals,
+            day__gt=start_date,
+            day__lt=end_date
+        )
+
+        dict_data_chart = {}
+        for signal in signals:
+            data_by_date = defaultdict(int)
+
+            for VCM in queryset.filter(signal=signal):
+                granularity = settings.GRANULARITIES[form_fields['granularity']]
+                data_by_date[granularity(VCM.day)] += VCM.value
+
+            dict_data_chart[signal] = sorted(data_by_date.items(),
+                                             key=operator.itemgetter(0))
+
+
+        return JsonResponse(dict_data_chart)
