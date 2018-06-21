@@ -7,7 +7,6 @@
 {% block bootstrap4_extra_head %}
     <script src='{% static "sensors/jquery-3.2.1.min.js" %}'></script>
     <script src='{% static "sensors/Chart.min.js" %}'></script>
-    <script src='{% static "sensors/utils.js" %}'></script>
 {% endblock %}
 
 {% block content %}
@@ -23,10 +22,10 @@
         <div class="chartjs-size-monitor">
             <div class="chartjs-size-monitor-expand">
                 <div>
+                    <canvas id="myChart" class="chartjs-render-monitor"></canvas>
                 </div>
             </div>
         </div>
-		<canvas id="canvas" class="chartjs-render-monitor"></canvas>
 	</div>
 
 {% endblock %}
